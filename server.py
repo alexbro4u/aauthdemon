@@ -1,10 +1,12 @@
+
+#commit
 import base64
 import hmac
 import hashlib
 
 from typing import Optional
 
-from fastapi import FastAPI, Cookie, Body
+from fastapi import FastAPI, Cookie, Body, Forms
 from fastapi.responses import Response
 
 import json
@@ -37,12 +39,12 @@ def verify_password(username: str, password: str) -> bool:
     return password_hash == stored_password_hash
 
 users = {
-    "Alexander@user.com":{
+    "Alexander@user.com": {
         "name": "Alexander",
         "password": "86c2a5ae3e580575c3d404ab30015a36b04c5ec8222e4a14301724566527b09f",
         "balance": 100_000
     }, 
-    "mikhail@user.com":{
+    "mikhail@user.com": {
         "name": "Mikhail",
         "password": "4ec06481c96f20b90e26c79408d00401ceb1fb00859239463bcafadf1f7ece44",
         "balance": 555_555
@@ -80,12 +82,10 @@ def index_page(username: Optional[str] = Cookie(default=None)):
 
 
 @app.post("/login")
-def process_login_page(data: dict = Body(...)):
-    username = data["username"]
-    password = data["password"]
+def process_login_page(username: str = Form(...), password: str = Form(...)):
     user = users.get(username)
     if not user or not verify_password(username, password):
-        return Response(
+        return Response( 
             json.dumps({ 
                 "success": False, 
                 "message": "Incorrect password or username"
