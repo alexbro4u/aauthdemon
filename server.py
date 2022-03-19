@@ -6,7 +6,7 @@ import hashlib
 
 from typing import Optional
 
-from fastapi import FastAPI, Cookie, Body, Forms
+from fastapi import FastAPI, Cookie, Body, Form
 from fastapi.responses import Response
 
 import json
@@ -17,7 +17,7 @@ PASSWORD_SALT = "788161556bfa5a51b1ed069c34efed434b42df1cbb2708edb2cae60da11310e
 SECRET_KEY = "5a34e717d5bfb93956444fb0129ae7811a958782f3c1c14c3177fab6fb60294d"
 
 
-def sign_data(data:str) -> str:
+def sign_data(data: str) -> str:
     """Returns signed data"""
     return hmac.new(
         SECRET_KEY.encode(),
